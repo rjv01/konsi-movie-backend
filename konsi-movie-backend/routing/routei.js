@@ -4,6 +4,7 @@ const router = express.Router();
 const Movie = require('../schema/schemas');
 const ReportedMovie = require('../schema/reportedMovieSchema'); 
 
+
 // Example route for testing
 router.get('/api/ok', async (req, res) => {
   res.send("ok working");
@@ -19,20 +20,38 @@ router.get('/api/all', async (req, res) => {
   }
 });
 
+
+const UserMessage = require('../schema/Msg');
+// POST route for posting a message
+router.post('/api/message',async(req,res)=>{
+  try{
+    const {title,message} = req.body;
+    const newMsg = new UserMessage({
+      title,
+      message
+    });
+    const savedMessage = await newMsg.save();
+    res.status(201).json({message:'Message posted successfully',savedMessage});
+  }catch(err){
+    console.log('Error Posting message',err);
+    res.status(500).json({message:'Error posting message'});
+  };
+});
+
+
 // POST route for posting a new movie
 router.post('/api/posting', async (req, res) => {
   try {
-    const { name, director, review, rating, genre, about, urview } = req.body;
+    const { name, director, rating, genre, about, urview } = req.body;
 
     // Ensure all required fields are present
     if (!name || !director || !rating || !genre || !about || !urview) {
-      return res.status(400).json({ message: 'All required fields must be provided' });
+      return res.status(400).json({ message: 'All required fields must be provided'});
     }
 
     const newMovie = new Movie({
       name,
       director,
-      review,
       rating,
       genre,
       about,
