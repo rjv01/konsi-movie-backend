@@ -124,14 +124,8 @@ router.post('/api/posting', async (req, res) => {
       return res.status(400).json({ message: 'All required fields must be provided' });
     }
 
-    const newMovie = new Movie({
-      name,
-      director,
-      rating,
-      genre,
-      about,
-      urview
-    });
+    // Use the sanitized data when creating the new movie
+    const newMovie = new Movie(trimmedData);
     await newMovie.save();
 
     res.status(201).json({ message: 'Movie posted successfully', movie: newMovie });
@@ -140,6 +134,7 @@ router.post('/api/posting', async (req, res) => {
     res.status(500).json({ message: 'Error posting movie' });
   }
 });
+
 
 
 // PUT route for updating a movie
