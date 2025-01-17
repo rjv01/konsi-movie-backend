@@ -125,7 +125,7 @@ router.post('/api/posting', async (req, res) => {
     }
 
     // Use the sanitized data when creating the new movie
-    const newMovie = new Movie(trimmedData);
+    const newMovie = new Movie({trimmedData});
     await newMovie.save();
 
     res.status(201).json({ message: 'Movie posted successfully', movie: newMovie });
