@@ -106,7 +106,7 @@ router.post('/api/posting', async (req, res) => {
     const trimmedData = {
       name: name?.trim(),
       director: director?.trim(),
-      rating: rating, // Assuming rating is a number
+      rating: rating?.trim(),
       genre: genre?.trim(),
       about: about?.trim(),
       urview: urview?.trim(),
