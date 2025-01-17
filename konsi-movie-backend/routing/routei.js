@@ -40,31 +40,75 @@ router.post('/api/message',async(req,res)=>{
 
 
 // POST route for posting a new movie
+// router.post('/api/posting', async (req, res) => {
+//   try {
+//     const { name, director, rating, genre, about, urview } = req.body;
+
+//     // Ensure all required fields are present
+//     if (!name || !director || !rating || !genre || !about || !urview) {
+//       return res.status(400).json({ message: 'All required fields must be provided'});
+//     }
+
+//     const newMovie = new Movie({
+//       name,
+//       director,
+//       rating,
+//       genre,
+//       about,
+//       urview,
+//     });
+
+//     await newMovie.save();
+//     res.status(201).json({ message: 'Movie posted successfully', movie: newMovie });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: 'Error posting movie' });
+//   }
+// });
+
 router.post('/api/posting', async (req, res) => {
   try {
-    const { name, director, rating, genre, about, urview } = req.body;
-
-    // Ensure all required fields are present
-    if (!name || !director || !rating || !genre || !about || !urview) {
-      return res.status(400).json({ message: 'All required fields must be provided'});
-    }
-
-    const newMovie = new Movie({
+    // Trim each field to remove extra spaces
+    const {
       name,
       director,
       rating,
       genre,
       about,
       urview,
-    });
+    } = req.body;
 
+    const trimmedData = {
+      name: name?.trim(),
+      director: director?.trim(),
+      rating: rating, // Assuming rating is a number
+      genre: genre?.trim(),
+      about: about?.trim(),
+      urview: urview?.trim(),
+    };
+
+    // Ensure all required fields are present after trimming
+    if (
+      !trimmedData.name ||
+      !trimmedData.director ||
+      !trimmedData.rating ||
+      !trimmedData.genre ||
+      !trimmedData.about ||
+      !trimmedData.urview
+    ) {
+      return res.status(400).json({ message: 'All required fields must be provided' });
+    }
+
+    const newMovie = new Movie(trimmedData);
     await newMovie.save();
+
     res.status(201).json({ message: 'Movie posted successfully', movie: newMovie });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Error posting movie' });
   }
 });
+
 
 // PUT route for updating a movie
 router.put('/api/update/:id', async (req, res) => {
