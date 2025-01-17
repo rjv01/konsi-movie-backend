@@ -23,20 +23,45 @@ router.get('/api/all', async (req, res) => {
 
 const UserMessage = require('../schema/Msg');
 // POST route for posting a message
-router.post('/api/message',async(req,res)=>{
-  try{
-    const {title,message} = req.body;
+// router.post('/api/message',async(req,res)=>{
+//   try{
+//     const {title,message} = req.body;
+//     const newMsg = new UserMessage({
+//       title,
+//       message
+//     });
+//     const savedMessage = await newMsg.save();
+//     res.status(201).json({message:'Message posted successfully',savedMessage});
+//   }catch(err){
+//     console.log('Error Posting message',err);
+//     res.status(500).json({message:'Error posting message'});
+//   };
+// });
+router.post('/api/message', async (req, res) => {
+  try {
+    // Trim inputs to remove unnecessary whitespace
+    const title = req.body.title?.trim();
+    const message = req.body.message?.trim();
+
+    // Validate required fields after trimming
+    if (!title || !message) {
+      return res.status(400).json({ message: 'Title and message are required' });
+    }
+
+    // Create and save the new message
     const newMsg = new UserMessage({
       title,
-      message
+      message,
     });
+
     const savedMessage = await newMsg.save();
-    res.status(201).json({message:'Message posted successfully',savedMessage});
-  }catch(err){
-    console.log('Error Posting message',err);
-    res.status(500).json({message:'Error posting message'});
-  };
+    res.status(201).json({ message: 'Message posted successfully', savedMessage });
+  } catch (err) {
+    console.error('Error posting message:', err);
+    res.status(500).json({ message: 'Error posting message' });
+  }
 });
+
 
 
 // POST route for posting a new movie
