@@ -34,6 +34,9 @@ const reportedMovieSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }, // Timestamp of reporting
+  imgurl:{
+    type:String
+  },
 },{timestamps:true});
 
 const ReportedMovie = mongoose.model("ReportedMovie", reportedMovieSchema);

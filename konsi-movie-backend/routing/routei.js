@@ -101,6 +101,7 @@ router.post('/api/posting', async (req, res) => {
       genre,
       about,
       urview,
+      imgurl,
     } = req.body;
 
     const trimmedData = {
@@ -110,6 +111,7 @@ router.post('/api/posting', async (req, res) => {
       genre: genre?.trim(),
       about: about?.trim(),
       urview: urview?.trim(),
+      imgurl,
     };
 
     // Ensure all required fields are present after trimming
