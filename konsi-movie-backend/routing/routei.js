@@ -163,22 +163,22 @@ router.put('/api/update/:id', async (req, res) => {
 });
 
 // DELETE route for deleting a movie
-router.delete('/api/delete/:id', async (req, res) => {
-  try {
-    const movieId = req.params.id;  // Get movie ID from URL parameters
+// router.delete('/api/delete/:id', async (req, res) => {
+//   try {
+//     const movieId = req.params.id;  // Get movie ID from URL parameters
 
-    const deletedMovie = await Movie.findByIdAndDelete(movieId);
+//     const deletedMovie = await Movie.findByIdAndDelete(movieId);
 
-    if (!deletedMovie) {
-      return res.status(404).json({ message: 'Movie not found' });
-    }
+//     if (!deletedMovie) {
+//       return res.status(404).json({ message: 'Movie not found' });
+//     }
 
-    res.status(200).json({ message: 'Movie deleted successfully', movie: deletedMovie });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Error deleting movie' });
-  }
-});
+//     res.status(200).json({ message: 'Movie deleted successfully', movie: deletedMovie });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: 'Error deleting movie' });
+//   }
+// });
 
 // Route to report a movie
 router.post('/api/report/:id', async (req, res) => {
