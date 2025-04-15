@@ -74,7 +74,8 @@ app.use(bodyParser.json());
 
 app.use(
   cors({
-    origin: ['http://localhost:5173','https://konsi-movies.vercel.app'],
+    origin: ['https://konsi-movies.vercel.app'],
+    // origin: ['http://localhost:5173','https://konsi-movies.vercel.app'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   })
@@ -84,8 +85,6 @@ app.use(
 app.use('/movies', routei);
 app.use('/users', userRoute);
 
-// Optional static file serving (if you have any uploads)
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Default route
 app.get('/oko', (req, res) => {
