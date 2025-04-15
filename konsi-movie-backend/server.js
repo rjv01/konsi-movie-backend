@@ -1,25 +1,95 @@
-const express = require('express');
-const app = express();
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const routei = require('./routing/routei');  // Import routei.js
+//old raj
+// const express = require('express');
+// const app = express();
+// const cors = require('cors');
+// const bodyParser = require('body-parser');
+// const path = require('path');
+// const routei = require('./routing/routei');
+// const userRoute = require('./routes/userRoute');
+// const cookieParser = require('cookie-parser');
 
-require('dotenv').config();
+// const routei = require('./routing/routei');   
+// const userRoute = require('./routes/userRoute');
+
+// require('dotenv').config();
+// require('./connection/condb');  // MongoDB connection
+
+// const PORT = process.env.PORT || 5000;
+
+// app.use(express.json()); // Middleware to parse JSON
+// app.use(express.urlencoded({ extended: true })); // For parsing URL-encoded data
+
+// // app.use(cors());
+// app.use(bodyParser.json());
+
+// app.use(cors({
+//     origin: 'http://localhost:5173',
+//     credentials: true,
+//   }));
+
+// //middleware
+// const cookieParser = require('cookie-parser');
+// app.use(cookieParser()); 
+
+
+// //'/movies' prefix
+// app.use('/movies', routei);
+// app.use('/users', userRoute);
+
+// app.get('/oko', (req, res) => {
+//     res.send('Konsi-Movie Backend is running raj');
+// });
+
+// app.listen(PORT, () => {
+//     console.log(`Server is running on http://localhost:${PORT}`);
+// });
+
+
+
+//new raj
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+
+const routei = require('./routing/routei');         // Movies route
+const userRoute = require('./routes/userRoute');    // User route
+
 require('./connection/condb');  // MongoDB connection
 
+const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(express.json()); // Middleware to parse JSON
-app.use(express.urlencoded({ extended: true })); // For parsing URL-encoded data
-
-app.use(cors());
+// Middleware
+app.use(express.json());
+app.use(cookieParser());
+app.use(
+  express.urlencoded({
+    extended: false,
+  })
+);
 app.use(bodyParser.json());
 
-//'/movies' prefix
-app.use('/movies', routei);
+app.use(
+  cors({
+    origin: ['http://localhost:5173'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
+  })
+);
 
+// Route middleware
+app.use('/movies', routei);
+app.use('/users', userRoute);
+
+// Optional static file serving (if you have any uploads)
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Default route
 app.get('/oko', (req, res) => {
-    res.send('Konsi-Movie Backend is running raj');
+  res.send('Konsi-Movie Backend is running raj');
 });
 
 app.listen(PORT, () => {
