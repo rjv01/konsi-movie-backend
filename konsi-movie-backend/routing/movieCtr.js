@@ -3,15 +3,16 @@ const express = require('express');
 const router = express.Router();
 const Movie = require('../schema/schemas');
 const ReportedMovie = require('../schema/reportedMovieSchema'); 
+const asyncHandler = require("express-async-handler");
 
 
 // Example route for testing
-router.get('/api/ok', async (req, res) => {
+router.get('/ok', async (req, res) => {
   res.send("ok working");
 });
 
 // GET route for fetching all movies
-router.get('/api/all', async (req, res) => {
+const GetAllMoives = asyncHandler( async (req, res) => {
   try {
     const movies = await Movie.find(); // Fetch all movies from the database
     res.status(200).json(movies); // Return movies as JSON response
@@ -19,6 +20,16 @@ router.get('/api/all', async (req, res) => {
     res.status(500).json({ message: 'Error fetching movies' });
   }
 });
+
+//old raj
+// router.get('/api/all', async (req, res) => {
+//   try {
+//     const movies = await Movie.find(); // Fetch all movies from the database
+//     res.status(200).json(movies); // Return movies as JSON response
+//   } catch (err) {
+//     res.status(500).json({ message: 'Error fetching movies' });
+//   }
+// });
 
 
 const UserMessage = require('../schema/Msg');
@@ -37,7 +48,9 @@ const UserMessage = require('../schema/Msg');
 //     res.status(500).json({message:'Error posting message'});
 //   };
 // });
-router.post('/api/message', async (req, res) => {
+
+//new raj
+const UsersMessage = asyncHandler(async (req, res) => {
   try {
     // Trim inputs to remove unnecessary whitespace
     const title = req.body.title?.trim();
@@ -61,6 +74,32 @@ router.post('/api/message', async (req, res) => {
     res.status(500).json({ message: 'Error posting message' });
   }
 });
+
+//old raj
+// router.post('/api/message', async (req, res) => {
+//   try {
+//     // Trim inputs to remove unnecessary whitespace
+//     const title = req.body.title?.trim();
+//     const message = req.body.message?.trim();
+
+//     // Validate required fields after trimming
+//     if (!title || !message) {
+//       return res.status(400).json({ message: 'Title and message are required' });
+//     }
+
+//     // Create and save the new message
+//     const newMsg = new UserMessage({
+//       title,
+//       message,
+//     });
+
+//     const savedMessage = await newMsg.save();
+//     res.status(201).json({ message: 'Message posted successfully', savedMessage });
+//   } catch (err) {
+//     console.error('Error posting message:', err);
+//     res.status(500).json({ message: 'Error posting message' });
+//   }
+// });
 
 
 
@@ -91,7 +130,8 @@ router.post('/api/message', async (req, res) => {
 //   }
 // });
 
-router.post('/api/posting', async (req, res) => {
+//new raj
+const PostMovie = asyncHandler( async (req, res) => {
   try {
     // Trim each field to remove extra spaces
     const {
@@ -126,8 +166,9 @@ router.post('/api/posting', async (req, res) => {
       return res.status(400).json({ message: 'All required fields must be provided' });
     }
 
-    // Use the sanitized data when creating the new movie
-    const newMovie = new Movie({trimmedData});
+    // const newMovie = new Movie({trimmedData});
+    const newMovie = new Movie(trimmedData);
+
     await newMovie.save();
 
     res.status(201).json({ message: 'Movie posted successfully', movie: newMovie });
@@ -137,33 +178,99 @@ router.post('/api/posting', async (req, res) => {
   }
 });
 
+//old raj
+// router.post('/api/posting', async (req, res) => {
+//   try {
+//     // Trim each field to remove extra spaces
+//     const {
+//       name,
+//       director,
+//       rating,
+//       genre,
+//       about,
+//       urview,
+//       imgurl,
+//     } = req.body;
+
+//     const trimmedData = {
+//       name: name?.trim(),
+//       director: director?.trim(),
+//       rating: rating?.trim(),
+//       genre: genre?.trim(),
+//       about: about?.trim(),
+//       urview: urview?.trim(),
+//       imgurl,
+//     };
+
+//     // Ensure all required fields are present after trimming
+//     if (
+//       !trimmedData.name ||
+//       !trimmedData.director ||
+//       !trimmedData.rating ||
+//       !trimmedData.genre ||
+//       !trimmedData.about ||
+//       !trimmedData.urview
+//     ) {
+//       return res.status(400).json({ message: 'All required fields must be provided' });
+//     }
+
+//     // Use the sanitized data when creating the new movie
+//     const newMovie = new Movie({trimmedData});
+//     await newMovie.save();
+
+//     res.status(201).json({ message: 'Movie posted successfully', movie: newMovie });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: 'Error posting movie' });
+//   }
+// });
+
 
 
 // PUT route for updating a movie
-router.put('/api/update/:id', async (req, res) => {
-  try {
-    const movieId = req.params.id;  // Get movie ID from URL parameters
-    const { name, director, review, rating, genre, about, urview } = req.body;
+// router.put('/api/update/:id', async (req, res) => {
+//   try {
+//     const movieId = req.params.id;  // Get movie ID from URL parameters
+//     const { name, director, review, rating, genre, about, urview } = req.body;
 
-    const updatedMovie = await Movie.findByIdAndUpdate(
-      movieId,  // Find the movie by ID
-      { name, director, review, rating, genre, about, urview },  // Fields to update
-      { new: true }  // Return the updated document
-    );
+//     const updatedMovie = await Movie.findByIdAndUpdate(
+//       movieId,  // Find the movie by ID
+//       { name, director, review, rating, genre, about, urview },  // Fields to update
+//       { new: true }  // Return the updated document
+//     );
 
-    if (!updatedMovie) {
-      return res.status(404).json({ message: 'Movie not found' });
-    }
+//     if (!updatedMovie) {
+//       return res.status(404).json({ message: 'Movie not found' });
+//     }
 
-    res.status(200).json({ message: 'Movie updated successfully', movie: updatedMovie });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Error updating movie' });
-  }
-});
+//     res.status(200).json({ message: 'Movie updated successfully', movie: updatedMovie });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: 'Error updating movie' });
+//   }
+// });
 
 // DELETE route for deleting a movie
+//old raj
 // router.delete('/api/delete/:id', async (req, res) => {
+//   try {
+//     const movieId = req.params.id;  // Get movie ID from URL parameters
+
+//     const deletedMovie = await Movie.findByIdAndDelete(movieId);
+
+//     if (!deletedMovie) {
+//       return res.status(404).json({ message: 'Movie not found' });
+//     }
+
+//     res.status(200).json({ message: 'Movie deleted successfully', movie: deletedMovie });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: 'Error deleting movie' });
+//   }
+// });
+
+//new raj
+// const DeleteMoviePost = asyncHandler(async (req, res) => {
 //   try {
 //     const movieId = req.params.id;  // Get movie ID from URL parameters
 
@@ -218,4 +325,9 @@ router.post('/api/report/:id', async (req, res) => {
 });
 
 
-module.exports = router;
+module.exports = {
+  UsersMessage,
+  PostMovie,
+  GetAllMoives,
+  // DeleteMoviePost,
+};
