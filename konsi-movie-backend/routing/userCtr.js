@@ -50,6 +50,7 @@ const registerUser = asyncHandler(async(req,res)=>{
 
 const loginUser = asyncHandler(async(req,res)=>{
     const {email,password} = req.body;
+    // console.log("loginuser ",req.body);
 
     if(!email || !password){
         res.status(400);
@@ -57,8 +58,7 @@ const loginUser = asyncHandler(async(req,res)=>{
     }
     const user = await User.findOne({email});
     if(!user){
-        res.status(400);
-        throw new Error("User not found, Please Register");
+        return res.status(400).json({ message: "User not found" });
     }
 
     const passwordIsCorrect = await bcrypt.compare(password,user.password);
@@ -106,8 +106,9 @@ const logoutUser = asyncHandler(async (req, res) => {
   });
 
 const adminlogin = asyncHandler(async(req,res)=>{
+    // console.log("admin login");
     const {email,password,code} = req.body;
-
+    console.log(req.body);
     const user = await User.findOne({email});
 
     if(!email || !password || !code){
@@ -116,16 +117,15 @@ const adminlogin = asyncHandler(async(req,res)=>{
     }
 
     if(!user){
-        res.status(400);
-        throw new Error("User not found");
+        return res.status(400).json({ message: "User not found" });
     }
 
-    if(code !== JWT_ADMIN){
+    if(code !== process.env.JWT_ADMIN){
         res.status(400);
         throw new Error("Only for admin");
     }
 
-    const correctPassword = await bcrypt.compare(password,user.password);
+    const passwordIsCorrect = await bcrypt.compare(password,user.password);
 
     const token = generateToken(user._id);
     res.cookie("token", token, {
@@ -152,5 +152,6 @@ module.exports = {
     registerUser,
     loginUser,
     loginStatus,
-    logoutUser
+    logoutUser,
+    adminlogin
 };
