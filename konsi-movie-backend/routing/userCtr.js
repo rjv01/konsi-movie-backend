@@ -105,6 +105,45 @@ const logoutUser = asyncHandler(async (req, res) => {
     return res.status(200).json({ message: "Successfully Logged Out" });
   });
 
+const adminlogin = asyncHandler(async(req,res)=>{
+    const {email,password,code} = req.body;
+
+    const user = await User.findOne({email});
+
+    if(!email || !password || !code){
+        res.status(400);
+        throw new Error("Please fill all the fields");
+    }
+
+    if(!user){
+        res.status(400);
+        throw new Error("User not found");
+    }
+
+    if(code !== JWT_ADMIN){
+        res.status(400);
+        throw new Error("Only for admin");
+    }
+
+    const correctPassword = await bcrypt.compare(password,user.password);
+
+    const token = generateToken(user._id);
+    res.cookie("token", token, {
+        path: "/",
+        httpOnly: true,
+        expires: new Date(Date.now() + 1000 * 86400), // 1 day
+        sameSite: "none",
+        secure: true,
+    });
+    if(user && passwordIsCorrect){
+        const {_id,name,email}=user;
+        res.status(201).json({_id,name,email});
+    }else{
+        res.status(400);
+        throw new Error("Invalid email or password");
+    }
+});
+
 router.get('/api/test',async(req,res)=>{
     res.send("testing");    
 });
