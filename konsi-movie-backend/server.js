@@ -54,7 +54,7 @@ const cors = require('cors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 
-const movieRoute = require('./routes/movieRoute');         // Movies route
+const movieCtr = require('./routing/movieCtr');         // Movies route
 const userRoute = require('./routes/userRoute');    // User route
 
 require('./connection/condb');  // MongoDB connection
@@ -84,8 +84,8 @@ app.use(
 );
 
 // Route middleware
-app.use('/api/movies', movieRoute);
-app.use('/api/users', userRoute);
+app.use('/movies', movieCtr);
+app.use('/users', userRoute);
 
 
 // Default route

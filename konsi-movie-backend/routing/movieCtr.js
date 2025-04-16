@@ -12,17 +12,7 @@ router.get('/ok', async (req, res) => {
 });
 
 // GET route for fetching all movies
-const GetAllMoives = asyncHandler( async (req, res) => {
-  try {
-    const movies = await Movie.find(); // Fetch all movies from the database
-    res.status(200).json(movies); // Return movies as JSON response
-  } catch (err) {
-    res.status(500).json({ message: 'Error fetching movies' });
-  }
-});
-
-//old raj
-// router.get('/api/all', async (req, res) => {
+// const GetAllMoives = asyncHandler( async (req, res) => {
 //   try {
 //     const movies = await Movie.find(); // Fetch all movies from the database
 //     res.status(200).json(movies); // Return movies as JSON response
@@ -30,6 +20,16 @@ const GetAllMoives = asyncHandler( async (req, res) => {
 //     res.status(500).json({ message: 'Error fetching movies' });
 //   }
 // });
+
+//old raj
+router.get('/api/all', async (req, res) => {
+  try {
+    const movies = await Movie.find(); // Fetch all movies from the database
+    res.status(200).json(movies); // Return movies as JSON response
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching movies' });
+  }
+});
 
 
 const UserMessage = require('../schema/Msg');
@@ -50,33 +50,7 @@ const UserMessage = require('../schema/Msg');
 // });
 
 //new raj
-const UsersMessage = asyncHandler(async (req, res) => {
-  try {
-    // Trim inputs to remove unnecessary whitespace
-    const title = req.body.title?.trim();
-    const message = req.body.message?.trim();
-
-    // Validate required fields after trimming
-    if (!title || !message) {
-      return res.status(400).json({ message: 'Title and message are required' });
-    }
-
-    // Create and save the new message
-    const newMsg = new UserMessage({
-      title,
-      message,
-    });
-
-    const savedMessage = await newMsg.save();
-    res.status(201).json({ message: 'Message posted successfully', savedMessage });
-  } catch (err) {
-    console.error('Error posting message:', err);
-    res.status(500).json({ message: 'Error posting message' });
-  }
-});
-
-//old raj
-// router.post('/api/message', async (req, res) => {
+// const UsersMessage = asyncHandler(async (req, res) => {
 //   try {
 //     // Trim inputs to remove unnecessary whitespace
 //     const title = req.body.title?.trim();
@@ -100,6 +74,32 @@ const UsersMessage = asyncHandler(async (req, res) => {
 //     res.status(500).json({ message: 'Error posting message' });
 //   }
 // });
+
+//old raj
+router.post('/api/message', async (req, res) => {
+  try {
+    // Trim inputs to remove unnecessary whitespace
+    const title = req.body.title?.trim();
+    const message = req.body.message?.trim();
+
+    // Validate required fields after trimming
+    if (!title || !message) {
+      return res.status(400).json({ message: 'Title and message are required' });
+    }
+
+    // Create and save the new message
+    const newMsg = new UserMessage({
+      title,
+      message,
+    });
+
+    const savedMessage = await newMsg.save();
+    res.status(201).json({ message: 'Message posted successfully', savedMessage });
+  } catch (err) {
+    console.error('Error posting message:', err);
+    res.status(500).json({ message: 'Error posting message' });
+  }
+});
 
 
 
@@ -130,56 +130,8 @@ const UsersMessage = asyncHandler(async (req, res) => {
 //   }
 // });
 
-//new raj
-const PostMovie = asyncHandler( async (req, res) => {
-  try {
-    // Trim each field to remove extra spaces
-    const {
-      name,
-      director,
-      rating,
-      genre,
-      about,
-      urview,
-      imgurl,
-    } = req.body;
-
-    const trimmedData = {
-      name: name?.trim(),
-      director: director?.trim(),
-      rating: rating?.trim(),
-      genre: genre?.trim(),
-      about: about?.trim(),
-      urview: urview?.trim(),
-      imgurl,
-    };
-
-    // Ensure all required fields are present after trimming
-    if (
-      !trimmedData.name ||
-      !trimmedData.director ||
-      !trimmedData.rating ||
-      !trimmedData.genre ||
-      !trimmedData.about ||
-      !trimmedData.urview
-    ) {
-      return res.status(400).json({ message: 'All required fields must be provided' });
-    }
-
-    // const newMovie = new Movie({trimmedData});
-    const newMovie = new Movie(trimmedData);
-
-    await newMovie.save();
-
-    res.status(201).json({ message: 'Movie posted successfully', movie: newMovie });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Error posting movie' });
-  }
-});
-
-//old raj
-// router.post('/api/posting', async (req, res) => {
+// //new raj
+// const PostMovie = asyncHandler( async (req, res) => {
 //   try {
 //     // Trim each field to remove extra spaces
 //     const {
@@ -214,8 +166,9 @@ const PostMovie = asyncHandler( async (req, res) => {
 //       return res.status(400).json({ message: 'All required fields must be provided' });
 //     }
 
-//     // Use the sanitized data when creating the new movie
-//     const newMovie = new Movie({trimmedData});
+//     // const newMovie = new Movie({trimmedData});
+//     const newMovie = new Movie(trimmedData);
+
 //     await newMovie.save();
 
 //     res.status(201).json({ message: 'Movie posted successfully', movie: newMovie });
@@ -224,6 +177,53 @@ const PostMovie = asyncHandler( async (req, res) => {
 //     res.status(500).json({ message: 'Error posting movie' });
 //   }
 // });
+
+//old raj
+router.post('/api/posting', async (req, res) => {
+  try {
+    // Trim each field to remove extra spaces
+    const {
+      name,
+      director,
+      rating,
+      genre,
+      about,
+      urview,
+      imgurl,
+    } = req.body;
+
+    const trimmedData = {
+      name: name?.trim(),
+      director: director?.trim(),
+      rating: rating?.trim(),
+      genre: genre?.trim(),
+      about: about?.trim(),
+      urview: urview?.trim(),
+      imgurl,
+    };
+
+    // Ensure all required fields are present after trimming
+    if (
+      !trimmedData.name ||
+      !trimmedData.director ||
+      !trimmedData.rating ||
+      !trimmedData.genre ||
+      !trimmedData.about ||
+      !trimmedData.urview
+    ) {
+      return res.status(400).json({ message: 'All required fields must be provided' });
+    }
+
+    // Use the sanitized data when creating the new movie
+    const newMovie = new Movie({trimmedData});
+    await newMovie.save();
+
+    res.status(201).json({ message: 'Movie posted successfully', movie: newMovie });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error posting movie' });
+  }
+});
 
 
 
@@ -325,9 +325,11 @@ router.post('/api/report/:id', async (req, res) => {
 });
 
 
-module.exports = {
-  UsersMessage,
-  PostMovie,
-  GetAllMoives,
-  // DeleteMoviePost,
-};
+// module.exports = {
+//   UsersMessage,
+//   PostMovie,
+//   GetAllMoives,
+//   // DeleteMoviePost,
+// };
+
+module.exports = router;

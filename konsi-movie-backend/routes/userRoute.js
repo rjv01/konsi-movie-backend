@@ -9,11 +9,11 @@ const {
     adminlogin
 } = require("../routing/userCtr");
 
-router.post("/register",registerUser);
-router.post("/login",loginUser);
-router.get("/loggedin",loginStatus);
-router.get("/logout",logoutUser);
-router.post("/adminlogin",adminlogin);
+router.post("/api/register",registerUser);
+router.post("/api/login",loginUser);
+router.get("/api/loggedin",loginStatus);
+router.get("/api/logout",logoutUser);
+router.post("/api/adminlogin",adminlogin);
 
 
 module.exports = router;
