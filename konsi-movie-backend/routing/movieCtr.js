@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const Movie = require('../schema/schemas');
 const ReportedMovie = require('../schema/reportedMovieSchema'); 
-const asyncHandler = require("express-async-handler");
+// const asyncHandler = require("express-async-handler");
 
 
 // Example route for testing
@@ -33,6 +33,7 @@ router.get('/api/all', async (req, res) => {
 
 
 const UserMessage = require('../schema/Msg');
+
 // POST route for posting a message
 // router.post('/api/message',async(req,res)=>{
 //   try{
@@ -265,10 +266,17 @@ router.post('/api/posting', async (req, res) => {
     }
 
     // ✅ FIXED: spread the trimmedData into the Movie constructor
-    const newMovie = new Movie(trimmedData);
-    await newMovie.save();
+    const newMovie = new Movie({
+      name,
+      director,
+      rating,
+      genre,
+      about,
+      urview,
+    });
+    const savedMovies = await newMovie.save();
 
-    res.status(201).json({ message: 'Movie posted successfully', movie: newMovie });
+    res.status(201).json({ message: 'Movie posted successfully',savedMovies});
   } catch (err) {
     console.error("Error saving movie:", err); // helpful for debugging
     res.status(500).json({ message: 'Error posting movie' });
