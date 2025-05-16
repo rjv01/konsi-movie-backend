@@ -31,9 +31,9 @@
         type: Number,
         default: 0 
     }, // Track reports
-    imgurl:{
-        type:String
-    },
+    // imgurl:{
+    //     type:String
+    // },
 },{timestamps:true});
 const Movie=mongoose.model("Movie",movieSchema);
 

@@ -144,14 +144,15 @@ const adminlogin = asyncHandler(async(req,res)=>{
     }
 });
 
-router.get('/api/test',async(req,res)=>{
-    res.send("testing");    
-});
+// const testing = asyncHandler(async (req,res)=>{
+//     res.send("lol lol tesing");
+// });
 
 module.exports = {
     registerUser,
     loginUser,
     loginStatus,
     logoutUser,
-    adminlogin
+    adminlogin,
+    // testing
 };

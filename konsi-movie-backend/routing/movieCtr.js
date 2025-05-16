@@ -179,9 +179,58 @@ router.post('/api/message', async (req, res) => {
 // });
 
 //old raj
+// router.post('/api/posting', async (req, res) => {
+//   try {
+//     // Trim each field to remove extra spaces
+//     const {
+//       name,
+//       director,
+//       rating,
+//       genre,
+//       about,
+//       urview,
+//       imgurl,
+//     } = req.body;
+
+//     const trimmedData = {
+//       name: name?.trim(),
+//       director: director?.trim(),
+//       rating: rating?.trim(),
+//       genre: genre?.trim(),
+//       about: about?.trim(),
+//       urview: urview?.trim(),
+//       imgurl,
+//     };
+
+//     // Ensure all required fields are present after trimming
+//     if (
+//       !trimmedData.name ||
+//       !trimmedData.director ||
+//       !trimmedData.rating ||
+//       !trimmedData.genre ||
+//       !trimmedData.about ||
+//       !trimmedData.urview
+//     ) {
+//       return res.status(400).json({ message: 'All required fields must be provided' });
+//     }
+
+//     // Use the sanitized data when creating the new movie
+//     const newMovie = new Movie({trimmedData});
+//     await newMovie.save();
+
+//     res.status(201).json({ message: 'Movie posted successfully', movie: newMovie });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: 'Error posting movie' });
+//   }
+// });
+
+
+//new raj
+
+// Route: POST /api/posting
 router.post('/api/posting', async (req, res) => {
   try {
-    // Trim each field to remove extra spaces
     const {
       name,
       director,
@@ -189,9 +238,10 @@ router.post('/api/posting', async (req, res) => {
       genre,
       about,
       urview,
-      imgurl,
+      // imgurl,
     } = req.body;
 
+    // Trim fields to remove extra spaces
     const trimmedData = {
       name: name?.trim(),
       director: director?.trim(),
@@ -199,10 +249,10 @@ router.post('/api/posting', async (req, res) => {
       genre: genre?.trim(),
       about: about?.trim(),
       urview: urview?.trim(),
-      imgurl,
+      // imgurl,
     };
 
-    // Ensure all required fields are present after trimming
+    // Validate required fields
     if (
       !trimmedData.name ||
       !trimmedData.director ||
@@ -214,16 +264,22 @@ router.post('/api/posting', async (req, res) => {
       return res.status(400).json({ message: 'All required fields must be provided' });
     }
 
-    // Use the sanitized data when creating the new movie
-    const newMovie = new Movie({trimmedData});
+    // ✅ FIXED: spread the trimmedData into the Movie constructor
+    const newMovie = new Movie(trimmedData);
     await newMovie.save();
 
     res.status(201).json({ message: 'Movie posted successfully', movie: newMovie });
   } catch (err) {
-    console.error(err);
+    console.error("Error saving movie:", err); // helpful for debugging
     res.status(500).json({ message: 'Error posting movie' });
+    if (!Movie) {
+  console.log("Movie model not defined!");
+}
+
   }
 });
+
+module.exports = router;
 
 
 
