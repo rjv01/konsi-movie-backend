@@ -230,38 +230,42 @@ router.post('/api/message', async (req, res) => {
 //new raj
 
 // Route: POST /api/posting
-router.post('/api/posting', async (req, res) => {
-  try {
-    // Trim and extract each field
-    const name = req.body.name?.trim();
-    const director = req.body.director?.trim();
-    const rating = req.body.rating?.trim();
-    const genre = req.body.genre?.trim();
-    const about = req.body.about?.trim();
-    const urview = req.body.urview?.trim();
-
-    // Validate all required fields
-    if (!name || !director || !rating || !genre || !about || !urview) {
-      return res.status(400).json({ message: 'All required fields must be provided' });
-    }
-
-    // Create and save the new movie
-    const newMovie = new Movie({
-      name,
-      director,
-      rating,
-      genre,
-      about,
-      urview,
-    });
-
-    const savedMovie = await newMovie.save();
-    res.status(201).json({ message: 'Movie posted successfully', movie: savedMovie });
-  } catch (err) {
-    console.error("Error saving movie:", err);
-    res.status(500).json({ message: 'Error posting movie backend' });
-  }
+router.get('/api/posting',async(req,res)=>{
+  res.send("working");
 });
+
+// router.post('/api/posting', async (req, res) => {
+//   try {
+//     // Trim and extract each field
+//     const name = req.body.name?.trim();
+//     const director = req.body.director?.trim();
+//     const rating = req.body.rating?.trim();
+//     const genre = req.body.genre?.trim();
+//     const about = req.body.about?.trim();
+//     const urview = req.body.urview?.trim();
+
+//     // Validate all required fields
+//     if (!name || !director || !rating || !genre || !about || !urview) {
+//       return res.status(400).json({ message: 'All required fields must be provided' });
+//     }
+
+//     // Create and save the new movie
+//     const newMovie = new Movie({
+//       name,
+//       director,
+//       rating,
+//       genre,
+//       about,
+//       urview,
+//     });
+
+//     const savedMovie = await newMovie.save();
+//     res.status(201).json({ message: 'Movie posted successfully', movie: savedMovie });
+//   } catch (err) {
+//     console.error("Error saving movie:", err);
+//     res.status(500).json({ message: 'Error posting movie backend' });
+//   }
+// });
 
 
 module.exports = router;
