@@ -232,43 +232,34 @@ router.post('/api/message', async (req, res) => {
 // Route: POST /api/posting
 router.post('/api/posting', async (req, res) => {
   try {
-    const {
+    // Trim and extract each field
+    const name = req.body.name?.trim();
+    const director = req.body.director?.trim();
+    const rating = req.body.rating?.trim();
+    const genre = req.body.genre?.trim();
+    const about = req.body.about?.trim();
+    const urview = req.body.urview?.trim();
+
+    // Validate all required fields
+    if (!name || !director || !rating || !genre || !about || !urview) {
+      return res.status(400).json({ message: 'All required fields must be provided' });
+    }
+
+    // Create and save the new movie
+    const newMovie = new Movie({
       name,
       director,
       rating,
       genre,
       about,
       urview,
-    } = req.body;
+    });
 
-    const trimmedData = {
-      name: name?.trim(),
-      director: director?.trim(),
-      rating: rating?.trim(),
-      genre: genre?.trim(),
-      about: about?.trim(),
-      urview: urview?.trim(),
-    };
-
-    if (
-      !trimmedData.name ||
-      !trimmedData.director ||
-      !trimmedData.rating ||
-      !trimmedData.genre ||
-      !trimmedData.about ||
-      !trimmedData.urview
-    ) {
-      return res.status(400).json({ message: 'All required fields must be provided' });
-    }
-
-    // ✅ FIXED: remove extra braces!
-    const newMovie = new Movie({trimmedData});
-    await newMovie.save();
-
-    res.status(201).json({ message: 'Movie posted successfully', movie: newMovie });
+    const savedMovie = await newMovie.save();
+    res.status(201).json({ message: 'Movie posted successfully', movie: savedMovie });
   } catch (err) {
     console.error("Error saving movie:", err);
-    res.status(500).json({ message: 'Error posting movie backend'});
+    res.status(500).json({ message: 'Error posting movie backend' });
   }
 });
 
