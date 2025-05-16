@@ -239,21 +239,17 @@ router.post('/api/posting', async (req, res) => {
       genre,
       about,
       urview,
-      // imgurl,
     } = req.body;
 
-    // Trim fields to remove extra spaces
     const trimmedData = {
-      name: name.trim(),
-      director: director.trim(),
-      rating: rating.trim(),
-      genre: genre.trim(),
-      about: about.trim(),
-      urview: urview.trim(),
-      // imgurl,
+      name: name?.trim(),
+      director: director?.trim(),
+      rating: rating?.trim(),
+      genre: genre?.trim(),
+      about: about?.trim(),
+      urview: urview?.trim(),
     };
 
-    // Validate required fields
     if (
       !trimmedData.name ||
       !trimmedData.director ||
@@ -265,27 +261,17 @@ router.post('/api/posting', async (req, res) => {
       return res.status(400).json({ message: 'All required fields must be provided' });
     }
 
-    // ✅ FIXED: spread the trimmedData into the Movie constructor
-    const newMovie = new Movie({
-      name,
-      director,
-      rating,
-      genre,
-      about,
-      urview,
-    });
-    const savedMovies = await newMovie.save();
+    // ✅ FIXED: remove extra braces!
+    const newMovie = new Movie(trimmedData);
+    await newMovie.save();
 
-    res.status(201).json({ message: 'Movie posted successfully',savedMovies});
+    res.status(201).json({ message: 'Movie posted successfully', movie: newMovie });
   } catch (err) {
-    console.error("Error saving movie:", err); // helpful for debugging
+    console.error("Error saving movie:", err);
     res.status(500).json({ message: 'Error posting movie' });
-    if (!Movie) {
-  console.log("Movie model not defined!");
-}
-
   }
 });
+
 
 module.exports = router;
 
