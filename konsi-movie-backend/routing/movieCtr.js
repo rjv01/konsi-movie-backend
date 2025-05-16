@@ -262,13 +262,13 @@ router.post('/api/posting', async (req, res) => {
     }
 
     // ✅ FIXED: remove extra braces!
-    const newMovie = new Movie(trimmedData);
+    const newMovie = new Movie({trimmedData});
     await newMovie.save();
 
     res.status(201).json({ message: 'Movie posted successfully', movie: newMovie });
   } catch (err) {
     console.error("Error saving movie:", err);
-    res.status(500).json({ message: 'Error posting movie' });
+    res.status(500).json({ message: 'Error posting movie backend'});
   }
 });
 
