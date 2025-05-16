@@ -230,9 +230,16 @@ router.post('/api/message', async (req, res) => {
 //new raj
 
 // Route: POST /api/posting
-router.get('/api/posting',async(req,res)=>{
-  res.send("working");
+router.post('/api/posting', async (req, res) => {
+  try {
+    console.log('Received data from frontend:', req.body);
+    res.status(200).json({ message: 'Data received successfully' });
+  } catch (err) {
+    console.error('Error logging data:', err);
+    res.status(500).json({ message: 'Error receiving data' });
+  }
 });
+
 
 // router.post('/api/posting', async (req, res) => {
 //   try {
