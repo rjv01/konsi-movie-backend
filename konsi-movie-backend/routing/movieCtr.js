@@ -243,12 +243,12 @@ router.post('/api/posting', async (req, res) => {
 
     // Trim fields to remove extra spaces
     const trimmedData = {
-      name: name?.trim(),
-      director: director?.trim(),
-      rating: rating?.trim(),
-      genre: genre?.trim(),
-      about: about?.trim(),
-      urview: urview?.trim(),
+      name: name.trim(),
+      director: director.trim(),
+      rating: rating.trim(),
+      genre: genre.trim(),
+      about: about.trim(),
+      urview: urview.trim(),
       // imgurl,
     };
 
