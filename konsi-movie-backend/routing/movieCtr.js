@@ -230,7 +230,7 @@ router.post('/api/message', async (req, res) => {
 //new raj
 
 // Route: POST /api/posting
-router.post('/api/postingmovies', async (req, res) => {
+router.post('/api/posting', async (req, res) => {
   try {
     const {
       name,
