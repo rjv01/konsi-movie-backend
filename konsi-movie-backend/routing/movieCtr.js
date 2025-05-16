@@ -241,38 +241,47 @@ router.post('/api/posting', async (req, res) => {
 });
 
 
-// router.post('/api/posting', async (req, res) => {
-//   try {
-//     // Trim and extract each field
-//     const name = req.body.name?.trim();
-//     const director = req.body.director?.trim();
-//     const rating = req.body.rating?.trim();
-//     const genre = req.body.genre?.trim();
-//     const about = req.body.about?.trim();
-//     const urview = req.body.urview?.trim();
+router.post('/api/posting', async (req, res) => {
+  try {
+    // Step 1: Log incoming data from frontend
+    console.log('📦 Received data from frontend:', req.body);
 
-//     // Validate all required fields
-//     if (!name || !director || !rating || !genre || !about || !urview) {
-//       return res.status(400).json({ message: 'All required fields must be provided' });
-//     }
+    // Step 2: Trim and extract each field
+    const name = req.body.name?.trim();
+    const director = req.body.director?.trim();
+    const rating = req.body.rating?.trim();
+    const genre = req.body.genre?.trim();
+    const about = req.body.about?.trim();
+    const urview = req.body.urview?.trim();
 
-//     // Create and save the new movie
-//     const newMovie = new Movie({
-//       name,
-//       director,
-//       rating,
-//       genre,
-//       about,
-//       urview,
-//     });
+    // Step 3: Validate required fields
+    if (!name || !director || !rating || !genre || !about || !urview) {
+      console.warn('❌ Missing required fields');
+      return res.status(400).json({ message: 'All required fields must be provided' });
+    }
 
-//     const savedMovie = await newMovie.save();
-//     res.status(201).json({ message: 'Movie posted successfully', movie: savedMovie });
-//   } catch (err) {
-//     console.error("Error saving movie:", err);
-//     res.status(500).json({ message: 'Error posting movie backend' });
-//   }
-// });
+    // Step 4: Save movie to DB
+    const newMovie = new Movie({
+      name,
+      director,
+      rating,
+      genre,
+      about,
+      urview,
+    });
+
+    const savedMovie = await newMovie.save();
+
+    // Step 5: Respond back
+    console.log('✅ Movie saved successfully:', savedMovie);
+    res.status(201).json({ message: 'Movie posted successfully', movie: savedMovie });
+  } catch (err) {
+    console.log("data didnt received");
+    console.error('🔥 Error saving movie:', err);
+    res.status(500).json({ message: 'Error posting movie backend' });
+  }
+});
+
 
 
 module.exports = router;
