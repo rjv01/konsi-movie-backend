@@ -115,7 +115,7 @@ const likeRoute = require('./routes/likesRoute');
 
 // DB connection
 require('dotenv').config();
-require('./connection/condb');  // MongoDB connection
+require('./connection/condb');  
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -128,7 +128,7 @@ app.use(cookieParser());
 // ✅ CORS setup
 app.use(
   cors({
-    origin: ['https://konsi-movies.vercel.app'], // Add localhost during dev if needed
+    origin: ['https://konsi-movies.vercel.app'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   })

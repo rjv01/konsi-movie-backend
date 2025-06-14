@@ -3,6 +3,8 @@ const express = require('express');
 const router = express.Router();
 const Movie = require('../schema/schemas');
 const ReportedMovie = require('../schema/reportedMovieSchema'); 
+const UserMessage = require('../schema/Msg');
+
 // const asyncHandler = require("express-async-handler");
 
 
@@ -10,16 +12,6 @@ const ReportedMovie = require('../schema/reportedMovieSchema');
 router.get('/ok', async (req, res) => {
   res.send("ok working");
 });
-
-// GET route for fetching all movies
-// const GetAllMoives = asyncHandler( async (req, res) => {
-//   try {
-//     const movies = await Movie.find(); // Fetch all movies from the database
-//     res.status(200).json(movies); // Return movies as JSON response
-//   } catch (err) {
-//     res.status(500).json({ message: 'Error fetching movies' });
-//   }
-// });
 
 //old raj
 router.get('/api/all', async (req, res) => {
@@ -32,49 +24,6 @@ router.get('/api/all', async (req, res) => {
 });
 
 
-const UserMessage = require('../schema/Msg');
-
-// POST route for posting a message
-// router.post('/api/message',async(req,res)=>{
-//   try{
-//     const {title,message} = req.body;
-//     const newMsg = new UserMessage({
-//       title,
-//       message
-//     });
-//     const savedMessage = await newMsg.save();
-//     res.status(201).json({message:'Message posted successfully',savedMessage});
-//   }catch(err){
-//     console.log('Error Posting message',err);
-//     res.status(500).json({message:'Error posting message'});
-//   };
-// });
-
-//new raj
-// const UsersMessage = asyncHandler(async (req, res) => {
-//   try {
-//     // Trim inputs to remove unnecessary whitespace
-//     const title = req.body.title?.trim();
-//     const message = req.body.message?.trim();
-
-//     // Validate required fields after trimming
-//     if (!title || !message) {
-//       return res.status(400).json({ message: 'Title and message are required' });
-//     }
-
-//     // Create and save the new message
-//     const newMsg = new UserMessage({
-//       title,
-//       message,
-//     });
-
-//     const savedMessage = await newMsg.save();
-//     res.status(201).json({ message: 'Message posted successfully', savedMessage });
-//   } catch (err) {
-//     console.error('Error posting message:', err);
-//     res.status(500).json({ message: 'Error posting message' });
-//   }
-// });
 
 //old raj
 router.post('/api/message', async (req, res) => {
@@ -229,17 +178,6 @@ router.post('/api/message', async (req, res) => {
 
 //new raj
 
-// Route: POST /api/posting
-// router.post('/api/posting', async (req, res) => {
-//   try {
-//     console.log('Received data from frontend:', req.body);
-//     res.status(200).json({ message: 'Data received successfully' });
-//   } catch (err) {
-//     console.error('Error logging data:', err);
-//     res.status(500).json({ message: 'Error receiving data' });
-//   }
-// });
-
 
 router.post('/api/posting', async (req, res) => {
   console.log('📦 Received data from frontend:', req.body);
@@ -296,9 +234,16 @@ router.post('/api/newposting',async(req,res)=>{
   }
 });
 
-module.exports = router;
-
-
+// Route: POST /api/posting
+router.post('/api/rajposting', async (req, res) => {
+  try {
+    console.log('Received data from frontend:', req.body);
+    res.status(200).json({ message: 'Data received successfully' });
+  } catch (err) {
+    console.error('Error logging data:', err);
+    res.status(500).json({ message: 'Error receiving data' });
+  }
+});
 
 // PUT route for updating a movie
 // router.put('/api/update/:id', async (req, res) => {
@@ -396,13 +341,5 @@ router.post('/api/report/:id', async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
-
-
-// module.exports = {
-//   UsersMessage,
-//   PostMovie,
-//   GetAllMoives,
-//   // DeleteMoviePost,
-// };
 
 module.exports = router;
