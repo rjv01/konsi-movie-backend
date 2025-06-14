@@ -1,4 +1,4 @@
-  
+
 const express = require('express');
 const router = express.Router();
 const Movie = require('../schema/movieModel');
@@ -52,10 +52,10 @@ router.post('/api/message', async (req, res) => {
 });
 
 
-router.post('/api/posting', async (req, res) => {
-  const {name,director,rating,about,urview} = req.body;
-  console.log("name:",name);
-  console.log(req.body);
+// router.post('/api/posting', async (req, res) => {
+//   const {name,director,rating,about,urview} = req.body;
+//   console.log("name:",name);
+//   console.log(req.body);
   // try {
   //   const movie = new Movie(req.body);
   //   const saved = await movie.save();
@@ -64,44 +64,44 @@ router.post('/api/posting', async (req, res) => {
   //   console.error("❌ Error in posting movie:", error);  // log it!
   //   res.status(500).json({ message: "Server error", details: error.message });
   // }
-});
-
-// router.post('/api/posting', async (req, res) => {
-//   console.log('📦 Received data from frontend:', req.body);
-//   try {
-//     const name = req.body.name;
-//     const director = req.body.director;
-//     const rating = req.body.rating;
-//     const genre = req.body.genre;
-//     const about = req.body.about;
-//     const urview = req.body.urview;
-
-//     // Step 3: Validate required fields
-//     if (!name || !director || !rating || !genre || !about || !urview) {
-//       console.warn('❌ Missing required fields');
-//       return res.status(400).json({ message: 'All required fields must be provided' });
-//     }
-
-//     // Step 4: Save movie to DB
-//     const newMovie = new Movie({
-//       name,
-//       director,
-//       rating,
-//       genre,
-//       about,
-//       urview,
-//     });
-
-//     const savedMovie = await newMovie.save();
-
-//     // Step 5: Respond back
-//     console.log('✅ Movie saved successfully:', savedMovie);
-//     res.status(201).json({ message: 'Movie posted successfully', movie: savedMovie });
-//   } catch (err) {
-//     console.error('🔥 Error saving movie:', err);
-//     res.status(500).json({ message: 'Error posting movie backend' });
-//   }
 // });
+
+router.post('/api/posting', async (req, res) => {
+  console.log('📦 Received data from frontend:', req.body);
+  try {
+    const name = req.body.name;
+    const director = req.body.director;
+    const rating = req.body.rating;
+    const genre = req.body.genre;
+    const about = req.body.about;
+    const urview = req.body.urview;
+
+    // Step 3: Validate required fields
+    if (!name || !director || !rating || !genre || !about || !urview) {
+      console.warn('❌ Missing required fields');
+      return res.status(400).json({ message: 'All required fields must be provided' });
+    }
+
+    // Step 4: Save movie to DB
+    const newMovie = new Movie({
+      name,
+      director,
+      rating,
+      genre,
+      about,
+      urview,
+    });
+
+    const savedMovie = await newMovie.save();
+
+    // Step 5: Respond back
+    console.log('✅ Movie saved successfully:', savedMovie);
+    res.status(201).json({ message: 'Movie posted successfully', movie: savedMovie });
+  } catch (err) {
+    console.error('🔥 Error saving movie:', err);
+    res.status(500).json({ message: 'Error posting movie backend' });
+  }
+});
 
 router.post('/api/newposting',async(req,res)=>{
   const {name,director,rating,genre,about,urview} = req.body;
