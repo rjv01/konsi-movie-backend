@@ -279,7 +279,22 @@ router.post('/api/posting', async (req, res) => {
   }
 });
 
+router.post('/api/newposting',async(req,res)=>{
+  const {name,director,rating,genre,about,urview} = req.body;
+  console.log(name,director,rating,genre,about,urview);
+  try{
+    const newMovieDetail = new Movie({
+      name,director,rating,genre,about,urview
+    });
 
+    const newSavedMovie = await newMovieDetail.save();
+    console.log("Movie posted successfully ",newSavedMovie);
+    res.status(201).json({message:"Movie posted successfully",movie:newSavedMovie});
+  }catch(error){
+    console.error("Error in posting movie",error);
+    res.status(500).json({message:"Error posting movie backend"});
+  }
+});
 
 module.exports = router;
 
