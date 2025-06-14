@@ -4,27 +4,27 @@
  const movieSchema = new mongoose.Schema({
     name:{ 
         type: String,
-        required: true 
+        required: true
     },
     director:{
         type:String,
-        required:true,
+        required:true
     },
     rating:{
         type:String,
-        required:true,
+        required:true
     },
     genre:{
         type:String,
-        required:true,
+        required:true
     },
     about:{
         type:String,
-        required:true,
+        required:true
     },
     urview:{
         type:String,
-        required:true,
+        required:true
     },
     reports:{ 
         type: Number,
