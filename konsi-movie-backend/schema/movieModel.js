@@ -17,7 +17,6 @@
     genre:{
         type:String,
         required:true,
-
     },
     about:{
         type:String,

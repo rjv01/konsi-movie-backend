@@ -53,14 +53,17 @@ router.post('/api/message', async (req, res) => {
 
 
 router.post('/api/posting', async (req, res) => {
-  try {
-    const movie = new Movie(req.body);
-    const saved = await movie.save();
-    res.status(201).json(saved);
-  } catch (error) {
-    console.error("❌ Error in posting movie:", error);  // log it!
-    res.status(500).json({ message: "Server error", details: error.message });
-  }
+  const {name,director,rating,about,urview} = req.body;
+  console.log("name:",name);
+  console.log(req.body);
+  // try {
+  //   const movie = new Movie(req.body);
+  //   const saved = await movie.save();
+  //   res.status(201).json(saved);
+  // } catch (error) {
+  //   console.error("❌ Error in posting movie:", error);  // log it!
+  //   res.status(500).json({ message: "Server error", details: error.message });
+  // }
 });
 
 // router.post('/api/posting', async (req, res) => {
