@@ -4,6 +4,7 @@ const router = express.Router();
 const Movie = require('../schema/movieModel');
 const ReportedMovie = require('../schema/reportedMovieSchema'); 
 const UserMessage = require('../schema/Msg');
+const IpModel = require("../schema/IpSchema");
 
 // const asyncHandler = require("express-async-handler");
 
@@ -16,12 +17,48 @@ router.get('/ok', async (req, res) => {
 //old raj
 router.get('/api/all', async (req, res) => {
   try {
+     const ip =
+      req.headers['cf-connecting-ip'] ||
+      req.headers['x-real-ip'] ||
+      req.headers['x-forwarded-for'] ||
+      req.socket.remoteAddress || "";
+
+    // Save IP to database (non-blocking)
+    IpModel.create({ ipaddress: ip }).catch((err) => {
+      console.error('Failed to log IP:', err.message);
+    });
+
     const movies = await Movie.find(); // Fetch all movies from the database
     res.status(200).json(movies); // Return movies as JSON response
   } catch (err) {
     res.status(500).json({ message: 'Error fetching movies' });
   }
+
+  // const ip = 
+  //   req.headers['cf-connecting-ip'] ||
+  //   req.headers['x-real-ip'] ||
+  //   req.headers['x-forwarded-for'] ||
+  //   req.socket.remoteAddress || "";
+
+
+  //   return res.json({
+  //     ip,
+  //   });
+
 });
+
+// app.get("/",(req,res)=>{
+//   const ip = 
+//     req.headers['cf-connecting-ip'] ||
+//     req.headers['x-real-ip'] ||
+//     req.headers['x-forwarded-for'] || 
+//     req.socket.remoteAddress || "";
+
+
+//   return res.json({
+//     ip,
+//   })
+// })
 
 
 

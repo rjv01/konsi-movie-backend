@@ -99,55 +99,81 @@
 //     console.log(`Server is running on http://localhost:${PORT}`);
 // });
 
+//old
+// app.get("/",(req,res)=>{
+  //   const ip = 
+  //     req.headers['cf-connecting-ip'] ||
+  //     req.headers['x-real-ip'] ||
+  //     req.headers['x-forwarded-for'] || 
+  //     req.socket.remoteAddress || "";
 
+
+  //   return res.json({
+  //     ip,
+  //   })
+  // })
 
 //new raj
 
-const express = require('express');
-const mongoose = require('mongoose');
-const cookieParser = require('cookie-parser');
-const cors = require('cors');
+  const express = require('express');
+  const mongoose = require('mongoose');
+  const cookieParser = require('cookie-parser');
+  const cors = require('cors');
+  const rateLimit = require('express-rate-limit');
 
-// Routes
-const movieCtr = require('./routing/movieCtr');
-const userRoute = require('./routes/userRoute');
-const likeRoute = require('./routes/likesRoute');
+  // Routes
+  const movieCtr = require('./routing/movieCtr');
+  const userRoute = require('./routes/userRoute');
+  const likeRoute = require('./routes/likesRoute');
 
-// DB connection
-require('dotenv').config();
-require('./connection/condb');  
+  // DB connection
+  require('dotenv').config();
+  require('./connection/condb');  
 
-const app = express();
-const PORT = process.env.PORT || 5000;
+  const app = express();
+  const PORT = process.env.PORT || 5000;
 
-// ✅ Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+  const limiter = rateLimit({
+    windowMs:15*60*1000,
+    max:50,
+    message:"Too Many request from your side,please try again later",
+    standardHeadersstandardHeaders: true,
+    legacyHeaders: false,
+  });
 
-// ✅ CORS setup
-app.use(
-  cors({
-    origin: ['https://konsi-movies.vercel.app'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true,
-  })
-);
+  // ✅ Middleware
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
+  app.use(cookieParser());
 
-// ✅ Routes
-app.use('/movies', movieCtr);
-app.use('/users', userRoute);
-app.use('/likes', likeRoute);
+  // ✅ CORS setup
+  app.use(
+    cors({
+      origin: ['https://konsi-movies.vercel.app'],
+      methods: ['GET', 'POST', 'PUT', 'DELETE'],
+      credentials: true,
+    })
+  );
 
-// ✅ Test route
-app.get('/oko', (req, res) => {
-  res.send('Konsi-Movie Backend is running raj');
-});
 
-// ✅ Start server
-app.listen(PORT, () => {
-  console.log(`🚀 Server is running on http://localhost:${PORT}`);
-});
+  app.set('trust proxy', 1);
+  app.use('/movies', limiter);
+
+  // ✅ Routes
+  app.use('/movies', movieCtr);
+  app.use('/users', userRoute);
+  app.use('/likes', likeRoute);
+
+  // ✅ Test route
+  app.get('/oko', (req, res) => {
+    res.send('Konsi-Movie Backend is running raj');
+  });
+
+
+  // ✅ Start server
+  app.listen(PORT, () => {
+    console.log(`🚀 Server is running on http://localhost:${PORT}`);
+  });
 
 // // working urls 
 // //GET ALL MOVIES http://localhost:3000/movies/api/all
