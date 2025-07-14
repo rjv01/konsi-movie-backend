@@ -22,6 +22,8 @@ router.get('/api/all', async (req, res) => {
       req.headers['x-real-ip'] ||
       req.headers['x-forwarded-for'] ||
       req.socket.remoteAddress || "";
+      const result = res.json({ ip, });
+      console.log("Ip: ",ip," result",result );
 
     // Save IP to database (non-blocking)
     IpModel.create({ ipaddress: ip }).catch((err) => {

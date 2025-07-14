@@ -8,5 +8,6 @@ const IpSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 const IpModel = mongoose.model("IpModel", IpSchema);
+console.log("Ip Model is working");
 
 module.exports = IpModel;
