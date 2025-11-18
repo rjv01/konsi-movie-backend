@@ -5,6 +5,7 @@ const Movie = require('../schema/movieModel');
 const ReportedMovie = require('../schema/reportedMovieSchema'); 
 const UserMessage = require('../schema/Msg');
 const IpModel = require("../schema/IpSchema");
+const User = require('../schema/userSchema');
 
 // const asyncHandler = require("express-async-handler");
 
@@ -17,52 +18,12 @@ router.get('/ok', async (req, res) => {
 //old raj
 router.get('/api/all', async (req, res) => {
   try {
-     const ip =
-      req.headers['cf-connecting-ip'] ||
-      req.headers['x-real-ip'] ||
-      req.headers['x-forwarded-for'] ||
-      req.socket.remoteAddress || "";
-      const result = res.json({ ip, });
-      console.log("Ip: ",ip," result",result );
-
-    // Save IP to database (non-blocking)
-    IpModel.create({ ipaddress: ip }).catch((err) => {
-      console.error('Failed to log IP:', err.message);
-    });
-
-    const movies = await Movie.find(); // Fetch all movies from the database
-    res.status(200).json(movies); // Return movies as JSON response
+    const movies = await Movie.find(); 
+    res.status(200).json(movies);
   } catch (err) {
     res.status(500).json({ message: 'Error fetching movies' });
   }
-
-  // const ip = 
-  //   req.headers['cf-connecting-ip'] ||
-  //   req.headers['x-real-ip'] ||
-  //   req.headers['x-forwarded-for'] ||
-  //   req.socket.remoteAddress || "";
-
-
-  //   return res.json({
-  //     ip,
-  //   });
-
 });
-
-// app.get("/",(req,res)=>{
-//   const ip = 
-//     req.headers['cf-connecting-ip'] ||
-//     req.headers['x-real-ip'] ||
-//     req.headers['x-forwarded-for'] || 
-//     req.socket.remoteAddress || "";
-
-
-//   return res.json({
-//     ip,
-//   })
-// })
-
-
 
 //old raj
 router.post('/api/message', async (req, res) => {
@@ -108,21 +69,17 @@ router.post('/api/message', async (req, res) => {
 router.post('/api/posting', async (req, res) => {
   console.log('📦 Received data from frontend:', req.body);
   try {
-    const name = req.body.name;
-    const director = req.body.director;
-    const rating = req.body.rating;
-    const genre = req.body.genre;
-    const about = req.body.about;
-    const urview = req.body.urview;
+    const {userName,name,director,rating,genre,about,urview} = req.body;
 
     // Step 3: Validate required fields
-    if (!name || !director || !rating || !genre || !about || !urview) {
+    if (!userName || !name || !director || !rating || !genre || !about || !urview) {
       console.warn('❌ Missing required fields');
       return res.status(400).json({ message: 'All required fields must be provided' });
     }
 
     // Step 4: Save movie to DB
     const newMovie = new Movie({
+      userName,
       name,
       director,
       rating,

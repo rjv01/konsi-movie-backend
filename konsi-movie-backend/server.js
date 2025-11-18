@@ -149,7 +149,11 @@
   // ✅ CORS setup
   app.use(
     cors({
-      origin: ['https://konsi-movies.vercel.app'],
+      origin: [
+          'https://konsi-movies.vercel.app',
+          'https://konsi-movie-frontend-9c5edzh1w-raj-shekhar-vermas-projects.vercel.app',
+          'http://localhost:5173',
+        ],
       methods: ['GET', 'POST', 'PUT', 'DELETE'],
       credentials: true,
     })
@@ -157,7 +161,8 @@
 
 
   app.set('trust proxy', 1);
-  app.use('/movies', limiter);
+  // app.use('/movies', limiter);
+  app.use('/users', limiter);
 
   // ✅ Routes
   app.use('/movies', movieCtr);
@@ -165,7 +170,7 @@
   app.use('/likes', likeRoute);
 
   // ✅ Test route
-  app.get('/oko', (req, res) => {
+  app.get('/raj', (req, res) => {
     res.send('Konsi-Movie Backend is running raj');
   });
 
