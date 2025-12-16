@@ -125,6 +125,7 @@
   const movieCtr = require('./routing/movieCtr');
   const userRoute = require('./routes/userRoute');
   const likeRoute = require('./routes/likesRoute');
+  const movieAiRoute = require('./routes/movieAiRoute');
 
   // DB connection
   require('dotenv').config();
@@ -168,6 +169,7 @@
   app.use('/movies', movieCtr);
   app.use('/users', userRoute);
   app.use('/likes', likeRoute);
+  app.use("/movieai",movieAiRoute);
 
   // ✅ Test route
   app.get('/raj', (req, res) => {
