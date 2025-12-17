@@ -138,7 +138,7 @@
     windowMs:15*60*1000,
     max:50,
     message:"Too Many request from your side,please try again later",
-    standardHeadersstandardHeaders: true,
+    standardHeaders: true,
     legacyHeaders: false,
   });
 
@@ -152,7 +152,6 @@
     cors({
       origin: [
           'https://konsi-movies.vercel.app',
-          'https://konsi-movie-frontend-9c5edzh1w-raj-shekhar-vermas-projects.vercel.app',
           'http://localhost:5173',
         ],
       methods: ['GET', 'POST', 'PUT', 'DELETE'],
