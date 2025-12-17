@@ -9,7 +9,7 @@ const ai = new GoogleGenAI({
 const activeAI = async (que) =>{
     try {
         const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash', 
+            model: 'gemini-2.5-flash-lite', 
             contents: que,
         });
         return response.text;
@@ -41,6 +41,28 @@ const sendQues = asyncHandler(async(req,res)=>{
     }
 });
 
+const sendMoviesData = asyncHandler(async(req,res)=>{
+    const { movieName,movieGenre } = req.body;
+    console.log("movieName: ",movieName);
+    console.log("movieGenre: ",movieGenre);
+
+    const ans = await activeAI(`
+        Recommend Movies only top 3 based on this movie detail give me output on Title ${movieName}, genre${movieGenre} and little description !`);
+
+    if(ans){
+        return res.status(200).json({
+            message:"Recommendation fetched",
+            output:ans
+        });
+    }else{
+        return res.status(500).json({
+            message:"Internal server error"
+        });
+    }
+})
+
 module.exports = {
     sendQues,
+    sendMoviesData,
+
 };
