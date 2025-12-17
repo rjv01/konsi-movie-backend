@@ -150,12 +150,21 @@
   // ✅ CORS setup
   app.use(
     cors({
-      origin: [
+      origin: (origin, callback) => {
+        const allowedOrigins = [
           'https://konsi-movies.vercel.app',
+          'https://konsi-movie-frontend-9c5edzh1w-raj-shekhar-vermas-projects.vercel.app',
           'http://localhost:5173',
-        ],
-      methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        ];
+
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error('Not allowed by CORS'));
+        }
+      },
       credentials: true,
+      methods: ['GET', 'POST', 'PUT', 'DELETE'],
     })
   );
 
