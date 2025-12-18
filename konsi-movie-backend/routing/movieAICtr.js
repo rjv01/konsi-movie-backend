@@ -61,7 +61,7 @@ const sendMoviesData = asyncHandler(async(req,res)=>{
     //         message:"Internal server error"
     //     });
     // }
-    if(movieName && movieName){
+    if(movieName && movieGenre){
         return res.status(200).json({
             message:"AI is working",
             output:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae vitae, ipsam fugit nesciunt ea quasi atque, minus perspiciatis hic eveniet quaerat? Architecto dolorum neque repudiandae iste amet inventore impedit sit maiores aliquid veritatis?"
@@ -69,7 +69,7 @@ const sendMoviesData = asyncHandler(async(req,res)=>{
     }else{
         return res.status(500).json({ message:"Interval server error" });
     }
-})
+});
 
 module.exports = {
     sendQues,
