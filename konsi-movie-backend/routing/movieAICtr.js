@@ -48,27 +48,27 @@ const sendMoviesData = asyncHandler(async(req,res)=>{
     console.log("movieName: ",movieName);
     console.log("movieGenre: ",movieGenre);
 
-    // const ans = await activeAI(`
-    //     Recommend Movies only top 3 based on this movie detail give me output on Title ${movieName}, genre${movieGenre} and little description !`);
+    const ans = await activeAI(`
+        Recommend Movies only top 3 based on this movie detail give me output on Title ${movieName}, genre${movieGenre} and little description !`);
 
-    // if(ans){
-    //     return res.status(200).json({
-    //         message:"Recommendation fetched",
-    //         output:ans
-    //     });
-    // }else{
-    //     return res.status(500).json({
-    //         message:"Internal server error"
-    //     });
-    // }
-    if(movieName && movieGenre){
+    if(ans){
         return res.status(200).json({
-            message:"AI is working",
-            output:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae vitae, ipsam fugit nesciunt ea quasi atque, minus perspiciatis hic eveniet quaerat? Architecto dolorum neque repudiandae iste amet inventore impedit sit maiores aliquid veritatis?"
+            message:"Recommendation fetched",
+            output:ans
         });
     }else{
-        return res.status(500).json({ message:"Interval server error" });
+        return res.status(500).json({
+            message:"Internal server error"
+        });
     }
+    // if(movieName && movieGenre){
+    //     return res.status(200).json({
+    //         message:"AI is working",
+    //         output:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae vitae, ipsam fugit nesciunt ea quasi atque, minus perspiciatis hic eveniet quaerat? Architecto dolorum neque repudiandae iste amet inventore impedit sit maiores aliquid veritatis?"
+    //     });
+    // }else{
+    //     return res.status(500).json({ message:"Interval server error" });
+    // }
 });
 
 module.exports = {
