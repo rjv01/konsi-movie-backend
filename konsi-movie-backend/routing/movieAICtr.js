@@ -9,15 +9,16 @@ const ai = new GoogleGenAI({
 const activeAI = async (que) =>{
     try {
         const response = await ai.models.generateContent({
-            model: 'gemini-2.0-flash',
-            // model: 'gemini-2.5-flash',
+            model: 'gemini-2.5-flash',
+            // model: 'gemini-2.0-flash',
             // model: 'gemini-2.5-flash-lite', 
             contents: que,
         });
         return response.text;
         // console.log(response.text);
     } catch (error) {
-        console.error("An error occurred:", error);
+        // console.error("An error occurred:", error);
+        return "AI API Error "+error;
     }
 }
 
@@ -50,6 +51,12 @@ const sendMoviesData = asyncHandler(async(req,res)=>{
 
     const ans = await activeAI(`
         Recommend Movies only top 3 based on this movie detail give me output on Title ${movieName}, genre${movieGenre} and little description !`);
+    
+    if(ans.substring(0,13) === "AI API Error "){
+        return res.status(500).json({
+            message:"Free tier limit exceeded, please try again later!!",
+        });
+    }
 
     if(ans){
         return res.status(200).json({
@@ -58,7 +65,7 @@ const sendMoviesData = asyncHandler(async(req,res)=>{
         });
     }else{
         return res.status(500).json({
-            message:"Internal server error"
+            message:"Internal server error",
         });
     }
     // if(movieName && movieGenre){
