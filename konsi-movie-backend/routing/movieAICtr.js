@@ -9,9 +9,9 @@ const ai = new GoogleGenAI({
 const activeAI = async (que) =>{
     try {
         const response = await ai.models.generateContent({
-            // model: 'gemini-2.5-flash',
+            model: 'gemini-2.5-flash',
             // model: 'gemini-2.0-flash',
-            model: 'gemini-2.5-flash-lite', 
+            // model: 'gemini-2.5-flash-lite', 
             contents: que,
         });
         return response.text;
