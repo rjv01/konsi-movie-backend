@@ -2,6 +2,43 @@ const asyncHandler = require("express-async-handler");
 require("dotenv").config();
 const { GoogleGenAI } = require('@google/genai');
 
+// const { OpenRouter } = require("@openrouter/sdk");
+// import { OpenRouter } from '@openrouter/sdk';
+
+// let openRouterAI; // shared instance
+
+// const initOpenRouter = async () => {
+//   if (!openRouterAI) {
+//     const { OpenRouter } = await import("@openrouter/sdk");
+//     openRouterAI = new OpenRouter({
+//       apiKey: process.env.OPENROUTER_API,
+//     });
+//   }
+//   return openRouterAI;
+// };
+
+// const activeAI = async (que) => {
+//   try {
+//     const client = await initOpenRouter();
+
+//     const completion = await client.chat.send({
+//       model: "openai/gpt-4o",
+//       messages: [
+//         {
+//           role: "user",
+//           content: que,
+//         },
+//       ],
+//     });
+
+//     return completion.choices[0].message.content;
+//   } catch (error) {
+//     // console.error("OpenRouter AI Error:", error);
+//     return "AI API Error: " + error.message;
+//   }
+// };
+
+
 const ai = new GoogleGenAI({
   apiKey:process.env.GEMINI_API_KEY,
 });
@@ -9,9 +46,9 @@ const ai = new GoogleGenAI({
 const activeAI = async (que) =>{
     try {
         const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
+            // model: 'gemini-2.5-flash',
             // model: 'gemini-2.0-flash',
-            // model: 'gemini-2.5-flash-lite', 
+            model: 'gemini-2.5-flash-lite', 
             contents: que,
         });
         return response.text;
@@ -49,10 +86,14 @@ const sendMoviesData = asyncHandler(async(req,res)=>{
     console.log("movieName: ",movieName);
     console.log("movieGenre: ",movieGenre);
 
-    const ans = await activeAI(`
-        Recommend Movies only top 3 based on this movie detail give me output on Title ${movieName}, genre${movieGenre} and little description !`);
+    //old
+    // const ans = await activeAI(`
+    //     Recommend Movies only top 3 based on this movie detail give me output on Title ${movieName}, genre${movieGenre} and little description !`);
     
-    if(ans.substring(0,13) === "AI API Error "){
+    //new
+    const ans = await activeAI(`Recommend Movies (only 3) on Title ${movieName}!Only give me Moives Name.`);
+    console.log(ans);
+    if(ans.substring(0,14) === "AI API Error: "){
         return res.status(500).json({
             message:"Free tier limit exceeded, please try again later!!",
         });
